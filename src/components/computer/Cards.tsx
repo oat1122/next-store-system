@@ -1,21 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
-import { Computer as ComputerType } from "@/types/computer";
+import { ComputerCardsProps } from "@/types/computer";
 import { useMenu } from "@/hooks/useMenu";
 import { getImageUrl, handleImageError } from "@/utils/formatters";
 import { ComputerSpecs, ComputerConditionChip } from "./Specs";
 import { ComputerActions } from "./Actions";
 import { ComputerMenu } from "./Menu";
-
-interface ComputerCardsProps {
-  data: ComputerType[];
-  onView?: (id: string) => void;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-  onDuplicate?: (id: string) => void;
-  onExport?: (id: string) => void;
-}
 
 export function ComputerCards({
   data,

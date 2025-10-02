@@ -13,13 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ViewColumn, Refresh } from "@mui/icons-material";
-import { ColumnConfig } from "@/hooks/useTableColumns";
-
-interface TableColumnControlsProps {
-  columns: ColumnConfig[];
-  onToggleColumn: (key: string) => void;
-  onResetColumns: () => void;
-}
+import { TableColumnControlsProps } from "@/types/computer";
 
 export function TableColumnControls({
   columns,

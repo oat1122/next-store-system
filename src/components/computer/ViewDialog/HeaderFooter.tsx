@@ -17,14 +17,9 @@ import {
   FileCopy,
   FileDownload,
 } from "@mui/icons-material";
-import { Computer } from "@/types/computer";
+import { DialogHeaderProps, DialogFooterProps } from "@/types/computer";
 import { ComputerConditionChip } from "../Specs";
 import { getImageUrl, handleImageError } from "@/utils/formatters";
-
-interface DialogHeaderProps {
-  computer: Computer;
-  onClose: () => void;
-}
 
 export function DialogHeader({ computer, onClose }: DialogHeaderProps) {
   return (
@@ -59,13 +54,6 @@ export function DialogHeader({ computer, onClose }: DialogHeaderProps) {
       </Stack>
     </DialogTitle>
   );
-}
-
-interface DialogFooterProps {
-  computer: Computer;
-  onEdit?: (id: string) => void;
-  onDuplicate?: (id: string) => void;
-  onExport?: (id: string) => void;
 }
 
 export function DialogFooter({

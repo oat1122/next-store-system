@@ -1,10 +1,6 @@
 import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
-
-interface SectionProps {
-  title: string;
-  children: React.ReactNode;
-}
+import { SectionProps } from "@/types/computer";
 
 export function Section({ title, children }: SectionProps) {
   return (

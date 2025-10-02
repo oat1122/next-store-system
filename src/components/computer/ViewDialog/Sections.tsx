@@ -15,22 +15,20 @@ import {
   Place,
   Person,
 } from "@mui/icons-material";
-import { Computer } from "@/types/computer";
+import {
+  ImageSectionProps,
+  OwnershipSectionProps,
+  HardwareSectionProps,
+  TagsSectionProps,
+  MetadataSectionProps,
+  SpecRowProps,
+} from "@/types/computer";
 import {
   formatDate,
   formatRam,
   formatStorage,
   handleImageError,
 } from "@/utils/formatters";
-
-interface ImageSectionProps {
-  activeImageUrl: string;
-  computerName: string;
-  images: Array<{ url: string; isPrimary: boolean }>;
-  activeIndex: number;
-  onImageSelect: (index: number) => void;
-  hasMultipleImages: boolean;
-}
 
 export function ImageSection({
   activeImageUrl,
@@ -107,15 +105,9 @@ export function ImageSection({
   );
 }
 
-interface OwnershipSectionProps {
-  computer: Computer;
-  hasOwnershipInfo: boolean;
-}
+export function OwnershipSection({ computer }: OwnershipSectionProps) {
+  const hasOwnershipInfo = computer.owner || computer.location;
 
-export function OwnershipSection({
-  computer,
-  hasOwnershipInfo,
-}: OwnershipSectionProps) {
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap">
       {computer.owner && (
@@ -143,10 +135,6 @@ export function OwnershipSection({
   );
 }
 
-interface HardwareSectionProps {
-  computer: Computer;
-}
-
 export function HardwareSection({ computer }: HardwareSectionProps) {
   return (
     <Grid container spacing={1.5}>
@@ -170,10 +158,6 @@ export function HardwareSection({ computer }: HardwareSectionProps) {
   );
 }
 
-interface TagsSectionProps {
-  computer: Computer;
-}
-
 export function TagsSection({ computer }: TagsSectionProps) {
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap">
@@ -188,10 +172,6 @@ export function TagsSection({ computer }: TagsSectionProps) {
   );
 }
 
-interface MetadataSectionProps {
-  computer: Computer;
-}
-
 export function MetadataSection({ computer }: MetadataSectionProps) {
   return (
     <Grid container spacing={1.5}>
@@ -200,13 +180,6 @@ export function MetadataSection({ computer }: MetadataSectionProps) {
       <SpecRow label="อัปเดตล่าสุด" value={formatDate(computer.updatedAt)} />
     </Grid>
   );
-}
-
-interface SpecRowProps {
-  icon?: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
-  mono?: boolean;
 }
 
 export function SpecRow({ icon, label, value, mono }: SpecRowProps) {

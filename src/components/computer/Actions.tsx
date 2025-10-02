@@ -3,14 +3,7 @@
 import React from "react";
 import { Button, Stack, IconButton } from "@mui/material";
 import { Visibility, Edit, MoreVert } from "@mui/icons-material";
-
-interface ComputerActionsProps {
-  computerId: string;
-  onView?: (id: string) => void;
-  onEdit?: (id: string) => void;
-  onMenuOpen?: (event: React.MouseEvent<HTMLElement>, id: string) => void;
-  variant?: "card" | "table";
-}
+import { ComputerActionsProps } from "@/types/computer";
 
 export function ComputerActions({
   computerId,

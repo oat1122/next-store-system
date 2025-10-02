@@ -2,13 +2,8 @@
 
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { ViewList, ViewModule } from "@mui/icons-material";
-import { ViewMode } from "@/types/computer";
+import { ViewToggleProps } from "@/types/computer";
 import { useViewToggle } from "@/hooks/useViewToggle";
-
-interface ViewToggleProps {
-  view: ViewMode;
-  onViewChange: (view: ViewMode) => void;
-}
 
 export function ViewToggle({ view, onViewChange }: ViewToggleProps) {
   const { mounted, handleChange } = useViewToggle({ onViewChange });

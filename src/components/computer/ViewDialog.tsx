@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Dialog, DialogContent, Grid } from "@mui/material";
-import { Computer as ComputerType } from "@/types/computer";
+import { ComputerViewDialogProps } from "@/types/computer";
 import { useComputerViewDialog } from "@/hooks/useComputerViewDialog";
 import { DialogHeader, DialogFooter } from "./ViewDialog/HeaderFooter";
 import { Section } from "./ViewDialog/Section";
@@ -28,15 +28,6 @@ import {
  * - Works for both card/table triggers via onView(id)
  */
 
-export interface ComputerViewDialogProps {
-  open: boolean;
-  onClose: () => void;
-  computer?: ComputerType | null;
-  onEdit?: (id: string) => void;
-  onDuplicate?: (id: string) => void;
-  onExport?: (id: string) => void;
-}
-
 export default function ComputerViewDialog({
   open,
   onClose,
@@ -50,7 +41,6 @@ export default function ComputerViewDialog({
     setActiveIndex,
     images,
     activeImageUrl,
-    hasOwnershipInfo,
     hasTags,
     hasMultipleImages,
   } = useComputerViewDialog({ computer });
@@ -79,10 +69,7 @@ export default function ComputerViewDialog({
           <Grid size={{ xs: 12, md: 7 }}>
             {/* Ownership & Location */}
             <Section title="รายละเอียดการครอบครอง">
-              <OwnershipSection
-                computer={computer}
-                hasOwnershipInfo={hasOwnershipInfo}
-              />
+              <OwnershipSection computer={computer} />
             </Section>
 
             {/* Hardware */}

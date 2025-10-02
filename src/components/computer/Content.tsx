@@ -2,18 +2,9 @@
 
 import React from "react";
 import { Box, CircularProgress, Alert, Typography } from "@mui/material";
-import { Computer, ViewMode } from "@/types/computer";
+import { ComputerContentProps } from "@/types/computer";
 import { ComputerCards } from "./Cards";
 import { ComputerTable } from "./Table";
-
-interface ComputerContentProps {
-  loading: boolean;
-  error: string;
-  computers: Computer[];
-  viewMode: ViewMode;
-  onView?: (id: string) => void;
-  onEdit?: (id: string) => void;
-}
 
 export function ComputerContent({
   loading,

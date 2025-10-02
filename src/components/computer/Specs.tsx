@@ -4,15 +4,12 @@ import React from "react";
 import { Box, Typography, Chip, Stack } from "@mui/material";
 import { Computer, Memory, Storage } from "@mui/icons-material";
 import {
-  Computer as ComputerType,
   conditionLabels,
   conditionColors,
+  ComputerSpecsProps,
+  ComputerConditionChipProps,
 } from "@/types/computer";
 import { formatStorage, formatRam } from "@/utils/formatters";
-
-interface ComputerSpecsProps {
-  computer: ComputerType;
-}
 
 export function ComputerSpecs({ computer }: ComputerSpecsProps) {
   return (
@@ -76,10 +73,6 @@ export function ComputerSpecs({ computer }: ComputerSpecsProps) {
       </Box>
     </>
   );
-}
-
-interface ComputerConditionChipProps {
-  condition: string;
 }
 
 export function ComputerConditionChip({

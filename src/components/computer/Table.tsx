@@ -13,7 +13,7 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-import { Computer } from "@/types/computer";
+import { Computer, ComputerTableProps } from "@/types/computer";
 import { useMenu } from "@/hooks/useMenu";
 import { useTableColumns } from "@/hooks/useTableColumns";
 import {
@@ -27,15 +27,6 @@ import { ComputerConditionChip } from "./Specs";
 import { ComputerActions } from "./Actions";
 import { ComputerMenu } from "./Menu";
 import { TableColumnControls } from "@/components/common/TableColumnControls";
-
-interface ComputerTableProps {
-  data: Computer[];
-  onView?: (id: string) => void;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-  onDuplicate?: (id: string) => void;
-  onExport?: (id: string) => void;
-}
 
 export function ComputerTable({
   data,

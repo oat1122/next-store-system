@@ -9,21 +9,10 @@ import {
   MenuItem,
   Paper,
   Stack,
-  SelectChangeEvent,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { ViewMode } from "@/types/computer";
+import { ComputerFiltersProps } from "@/types/computer";
 import { ViewToggle } from "@/components/common/ViewToggle";
-
-interface ComputerFiltersProps {
-  mounted: boolean;
-  searchTerm: string;
-  conditionFilter: string;
-  viewMode: ViewMode;
-  onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onConditionChange: (event: SelectChangeEvent<string>) => void;
-  onViewModeChange: (mode: ViewMode) => void;
-}
 
 export function ComputerFilters({
   mounted,
