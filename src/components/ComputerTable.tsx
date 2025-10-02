@@ -26,7 +26,7 @@ interface ComputerTableProps {
 
 export function ComputerTable({ data }: ComputerTableProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [_selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: string) => {
     setAnchorEl(event.currentTarget);
@@ -85,6 +85,9 @@ export function ComputerTable({ data }: ComputerTableProps) {
                   alt={computer.name}
                   variant="rounded"
                   sx={{ width: 48, height: 48 }}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    (e.target as HTMLImageElement).src = "/images/noimage.svg";
+                  }}
                 />
               </TableCell>
               <TableCell>
@@ -146,9 +149,9 @@ export function ComputerTable({ data }: ComputerTableProps) {
                     ] || computer.condition
                   }
                   color={
-                    conditionColors[
+                    (conditionColors[
                       computer.condition as keyof typeof conditionColors
-                    ] as any
+                    ] as 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning') || 'default'
                   }
                   size="small"
                 />

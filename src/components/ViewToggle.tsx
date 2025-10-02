@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { ViewList, ViewModule } from "@mui/icons-material";
 import { ViewMode } from "@/types/computer";
@@ -10,6 +11,12 @@ interface ViewToggleProps {
 }
 
 export function ViewToggle({ view, onViewChange }: ViewToggleProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
     newView: ViewMode | null
@@ -18,6 +25,14 @@ export function ViewToggle({ view, onViewChange }: ViewToggleProps) {
       onViewChange(newView);
     }
   };
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-1 rounded-lg border bg-card p-1 opacity-50">
+        <div className="px-4 py-2">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <ToggleButtonGroup

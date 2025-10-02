@@ -8,7 +8,6 @@ import {
   Chip,
   Button,
   Box,
-  Grid,
   Stack,
   IconButton,
   Menu,
@@ -35,7 +34,7 @@ interface ComputerCardsProps {
 
 export function ComputerCards({ data }: ComputerCardsProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [_selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: string) => {
     setAnchorEl(event.currentTarget);
@@ -93,6 +92,9 @@ export function ComputerCards({ data }: ComputerCardsProps) {
                 image={computer.images[0]?.url || "/images/noimage.svg"}
                 alt={computer.name}
                 sx={{ objectFit: "cover" }}
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  (e.target as HTMLImageElement).src = "/images/noimage.svg";
+                }}
               />
               {/* Badge สภาพ */}
               <Box sx={{ position: "absolute", top: 8, right: 8 }}>
@@ -103,9 +105,16 @@ export function ComputerCards({ data }: ComputerCardsProps) {
                     ] || computer.condition
                   }
                   color={
-                    conditionColors[
+                    (conditionColors[
                       computer.condition as keyof typeof conditionColors
-                    ] as any
+                    ] as
+                      | "default"
+                      | "primary"
+                      | "secondary"
+                      | "error"
+                      | "info"
+                      | "success"
+                      | "warning") || "default"
                   }
                   size="small"
                 />

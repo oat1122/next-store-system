@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // สร้างเงื่อนไขสำหรับการค้นหา
-    const where: any = {};
+    const where: {
+      OR?: Array<Record<string, { contains: string }>>;
+      condition?: string;
+    } = {};
 
     if (search) {
       where.OR = [
