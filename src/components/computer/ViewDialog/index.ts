@@ -1,4 +1,4 @@
-export { DialogHeader, DialogFooter } from "./DialogHeaderFooter";
+export { DialogHeader, DialogFooter } from "./HeaderFooter";
 export { Section } from "./Section";
 export {
   ImageSection,
@@ -7,4 +7,4 @@ export {
   TagsSection,
   MetadataSection,
   SpecRow,
-} from "./DialogSections";
+} from "./Sections";

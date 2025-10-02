@@ -4,18 +4,15 @@ import React from "react";
 import { Dialog, DialogContent, Grid } from "@mui/material";
 import { Computer as ComputerType } from "@/types/computer";
 import { useComputerViewDialog } from "@/hooks/useComputerViewDialog";
-import {
-  DialogHeader,
-  DialogFooter,
-} from "./ComputerViewDialog/DialogHeaderFooter";
-import { Section } from "./ComputerViewDialog/Section";
+import { DialogHeader, DialogFooter } from "./ViewDialog/HeaderFooter";
+import { Section } from "./ViewDialog/Section";
 import {
   ImageSection,
   OwnershipSection,
   HardwareSection,
   TagsSection,
   MetadataSection,
-} from "./ComputerViewDialog/DialogSections";
+} from "./ViewDialog/Sections";
 
 /**
  * ComputerViewDialog

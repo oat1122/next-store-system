@@ -4,12 +4,9 @@ import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 import { Computer as ComputerType } from "@/types/computer";
 import { useMenu } from "@/hooks/useMenu";
 import { getImageUrl, handleImageError } from "@/utils/formatters";
-import {
-  ComputerSpecs,
-  ComputerConditionChip,
-} from "@/components/ComputerSpecs";
-import { ComputerActions } from "@/components/ComputerActions";
-import { ComputerMenu } from "@/components/ComputerMenu";
+import { ComputerSpecs, ComputerConditionChip } from "./Specs";
+import { ComputerActions } from "./Actions";
+import { ComputerMenu } from "./Menu";
 
 interface ComputerCardsProps {
   data: ComputerType[];

@@ -4,10 +4,13 @@ import { useState } from "react";
 import { Container } from "@mui/material";
 import { useComputers } from "@/hooks/useComputers";
 import { useViewMode } from "@/hooks/useViewMode";
-import { PageHeader, LoadingState } from "@/components/PageComponents";
-import { ComputerFilters } from "@/components/ComputerFilters";
-import { ComputerContent } from "@/components/ComputerContent";
-import { ComputerPagination } from "@/components/ComputerPagination";
+import {
+  PageHeader,
+  LoadingState,
+  ComputerFilters,
+  ComputerContent,
+  ComputerPagination,
+} from "@/components";
 import { ComputerViewDialog } from "@/components";
 import { Computer } from "@/types/computer";
 

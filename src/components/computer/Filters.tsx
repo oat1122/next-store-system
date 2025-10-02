@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { ViewMode } from "@/types/computer";
-import { ViewToggle } from "@/components/ViewToggle";
+import { ViewToggle } from "@/components/common/ViewToggle";
 
 interface ComputerFiltersProps {
   mounted: boolean;

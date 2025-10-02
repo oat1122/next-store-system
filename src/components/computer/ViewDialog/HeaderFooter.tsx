@@ -18,7 +18,7 @@ import {
   FileDownload,
 } from "@mui/icons-material";
 import { Computer } from "@/types/computer";
-import { ComputerConditionChip } from "@/components/ComputerSpecs";
+import { ComputerConditionChip } from "../Specs";
 import { getImageUrl, handleImageError } from "@/utils/formatters";
 
 interface DialogHeaderProps {

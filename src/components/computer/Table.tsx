@@ -23,10 +23,10 @@ import {
   getImageUrl,
   handleImageError,
 } from "@/utils/formatters";
-import { ComputerConditionChip } from "@/components/ComputerSpecs";
-import { ComputerActions } from "@/components/ComputerActions";
-import { ComputerMenu } from "@/components/ComputerMenu";
-import { TableColumnControls } from "@/components/TableColumnControls";
+import { ComputerConditionChip } from "./Specs";
+import { ComputerActions } from "./Actions";
+import { ComputerMenu } from "./Menu";
+import { TableColumnControls } from "@/components/common/TableColumnControls";
 
 interface ComputerTableProps {
   data: Computer[];

@@ -3,8 +3,8 @@
 import React from "react";
 import { Box, CircularProgress, Alert, Typography } from "@mui/material";
 import { Computer, ViewMode } from "@/types/computer";
-import { ComputerCards } from "@/components/ComputerCards";
-import { ComputerTable } from "@/components/ComputerTable";
+import { ComputerCards } from "./Cards";
+import { ComputerTable } from "./Table";
 
 interface ComputerContentProps {
   loading: boolean;
