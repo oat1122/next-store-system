@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { ViewList, ViewModule } from "@mui/icons-material";
 import { ViewMode } from "@/types/computer";
+import { useViewToggle } from "@/hooks/useViewToggle";
 
 interface ViewToggleProps {
   view: ViewMode;
@@ -11,20 +11,7 @@ interface ViewToggleProps {
 }
 
 export function ViewToggle({ view, onViewChange }: ViewToggleProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newView: ViewMode | null
-  ) => {
-    if (newView !== null) {
-      onViewChange(newView);
-    }
-  };
+  const { mounted, handleChange } = useViewToggle({ onViewChange });
 
   if (!mounted) {
     return (

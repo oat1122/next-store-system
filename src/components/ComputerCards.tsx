@@ -1,59 +1,46 @@
 "use client";
 
+import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
+import { Computer as ComputerType } from "@/types/computer";
+import { useMenu } from "@/hooks/useMenu";
+import { getImageUrl, handleImageError } from "@/utils/formatters";
 import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Chip,
-  Button,
-  Box,
-  Stack,
-  IconButton,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import {
-  Visibility,
-  Edit,
-  MoreVert,
-  Computer,
-  Memory,
-  Storage,
-} from "@mui/icons-material";
-import {
-  Computer as ComputerType,
-  conditionLabels,
-  conditionColors,
-} from "@/types/computer";
-import { useState } from "react";
+  ComputerSpecs,
+  ComputerConditionChip,
+} from "@/components/ComputerSpecs";
+import { ComputerActions } from "@/components/ComputerActions";
+import { ComputerMenu } from "@/components/ComputerMenu";
 
 interface ComputerCardsProps {
   data: ComputerType[];
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onDuplicate?: (id: string) => void;
+  onExport?: (id: string) => void;
 }
 
-export function ComputerCards({ data }: ComputerCardsProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [_selectedId, setSelectedId] = useState<string | null>(null);
+export function ComputerCards({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  onDuplicate,
+  onExport,
+}: ComputerCardsProps) {
+  const { anchorEl, selectedId, isOpen, handleMenuOpen, handleMenuClose } =
+    useMenu();
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: string) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedId(id);
+  const handleDelete = () => {
+    if (selectedId) onDelete?.(selectedId);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSelectedId(null);
+  const handleDuplicate = () => {
+    if (selectedId) onDuplicate?.(selectedId);
   };
 
-  const formatStorage = (storageGb?: number, storageType?: string) => {
-    if (!storageGb) return "—";
-    return `${storageGb}GB ${storageType || ""}`.trim();
-  };
-
-  const formatRam = (ramGb?: number) => {
-    if (!ramGb) return "—";
-    return `${ramGb}GB`;
+  const handleExport = () => {
+    if (selectedId) onExport?.(selectedId);
   };
 
   return (
@@ -89,34 +76,15 @@ export function ComputerCards({ data }: ComputerCardsProps) {
               <CardMedia
                 component="img"
                 height="160"
-                image={computer.images[0]?.url || "/images/noimage.svg"}
+                image={getImageUrl(computer.images)}
                 alt={computer.name}
                 sx={{ objectFit: "cover" }}
-                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                  (e.target as HTMLImageElement).src = "/images/noimage.svg";
-                }}
+                onError={handleImageError}
               />
               {/* Badge สภาพ */}
               <Box sx={{ position: "absolute", top: 8, right: 8 }}>
-                <Chip
-                  label={
-                    conditionLabels[
-                      computer.condition as keyof typeof conditionLabels
-                    ] || computer.condition
-                  }
-                  color={
-                    (conditionColors[
-                      computer.condition as keyof typeof conditionColors
-                    ] as
-                      | "default"
-                      | "primary"
-                      | "secondary"
-                      | "error"
-                      | "info"
-                      | "success"
-                      | "warning") || "default"
-                  }
-                  size="small"
+                <ComputerConditionChip
+                  condition={computer.condition || "unknown"}
                 />
               </Box>
             </Box>
@@ -148,114 +116,32 @@ export function ComputerCards({ data }: ComputerCardsProps) {
                 {computer.code} - {computer.name}
               </Typography>
 
-              {/* ยี่ห้อและรุ่น */}
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                gutterBottom
-                sx={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  display: "-webkit-box",
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: "vertical",
-                  minHeight: "20px",
-                }}
-              >
-                {computer.brand} {computer.model}
-              </Typography>
-
-              {/* Tags */}
-              <Box sx={{ mb: 2, minHeight: "32px" }}>
-                <Stack direction="row" spacing={1} flexWrap="wrap">
-                  <Chip
-                    label={computer.owner}
-                    variant="outlined"
-                    size="small"
-                  />
-                  <Chip
-                    label={computer.location}
-                    variant="outlined"
-                    size="small"
-                  />
-                </Stack>
-              </Box>
-
-              {/* ข้อมูลฮาร์ดแวร์ */}
-              <Box sx={{ mt: "auto" }}>
-                <Stack spacing={1}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Computer color="action" sx={{ fontSize: 16 }} />
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        flex: 1,
-                      }}
-                    >
-                      {computer.cpu || "—"}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Memory color="action" sx={{ fontSize: 16 }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {formatRam(computer.ramGb)}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Storage color="action" sx={{ fontSize: 16 }} />
-                    <Typography variant="body2" color="text.secondary">
-                      {formatStorage(computer.storageGb, computer.storageType)}
-                    </Typography>
-                  </Box>
-                </Stack>
-              </Box>
+              <ComputerSpecs computer={computer} />
             </CardContent>
 
             {/* ปุ่มจัดการ */}
             <Box sx={{ p: 2, pt: 0 }}>
-              <Stack direction="row" spacing={1}>
-                <Button
-                  variant="contained"
-                  size="small"
-                  startIcon={<Visibility />}
-                  sx={{ flex: 1 }}
-                >
-                  ดู
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  startIcon={<Edit />}
-                  sx={{ flex: 1 }}
-                >
-                  แก้ไข
-                </Button>
-                <IconButton
-                  size="small"
-                  onClick={(e) => handleMenuOpen(e, computer.id)}
-                >
-                  <MoreVert />
-                </IconButton>
-              </Stack>
+              <ComputerActions
+                computerId={computer.id}
+                onView={onView}
+                onEdit={onEdit}
+                onMenuOpen={handleMenuOpen}
+                variant="card"
+              />
             </Box>
           </Card>
         </Box>
       ))}
 
       {/* Menu สำหรับตัวเลือกเพิ่มเติม */}
-      <Menu
+      <ComputerMenu
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
+        isOpen={isOpen}
         onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>ลบ</MenuItem>
-        <MenuItem onClick={handleMenuClose}>ทำซ้ำ</MenuItem>
-        <MenuItem onClick={handleMenuClose}>ส่งออก</MenuItem>
-      </Menu>
+        onDelete={handleDelete}
+        onDuplicate={handleDuplicate}
+        onExport={handleExport}
+      />
     </Box>
   );
 }

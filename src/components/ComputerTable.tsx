@@ -8,44 +8,53 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
-  IconButton,
-  Menu,
-  MenuItem,
   Typography,
   Box,
   Avatar,
 } from "@mui/material";
-import { Visibility, Edit, MoreVert } from "@mui/icons-material";
-import { Computer, conditionLabels, conditionColors } from "@/types/computer";
-import { useState } from "react";
+import { Computer } from "@/types/computer";
+import { useMenu } from "@/hooks/useMenu";
+import {
+  formatStorage,
+  formatRam,
+  formatDate,
+  getImageUrl,
+  handleImageError,
+} from "@/utils/formatters";
+import { ComputerConditionChip } from "@/components/ComputerSpecs";
+import { ComputerActions } from "@/components/ComputerActions";
+import { ComputerMenu } from "@/components/ComputerMenu";
 
 interface ComputerTableProps {
   data: Computer[];
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+  onDuplicate?: (id: string) => void;
+  onExport?: (id: string) => void;
 }
 
-export function ComputerTable({ data }: ComputerTableProps) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [_selectedId, setSelectedId] = useState<string | null>(null);
+export function ComputerTable({
+  data,
+  onView,
+  onEdit,
+  onDelete,
+  onDuplicate,
+  onExport,
+}: ComputerTableProps) {
+  const { anchorEl, selectedId, isOpen, handleMenuOpen, handleMenuClose } =
+    useMenu();
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: string) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedId(id);
+  const handleDelete = () => {
+    if (selectedId) onDelete?.(selectedId);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setSelectedId(null);
+  const handleDuplicate = () => {
+    if (selectedId) onDuplicate?.(selectedId);
   };
 
-  const formatStorage = (storageGb?: number, storageType?: string) => {
-    if (!storageGb) return "—";
-    return `${storageGb}GB ${storageType || ""}`.trim();
-  };
-
-  const formatRam = (ramGb?: number) => {
-    if (!ramGb) return "—";
-    return `${ramGb}GB`;
+  const handleExport = () => {
+    if (selectedId) onExport?.(selectedId);
   };
 
   return (
@@ -81,13 +90,11 @@ export function ComputerTable({ data }: ComputerTableProps) {
             >
               <TableCell>
                 <Avatar
-                  src={computer.images[0]?.url || "/images/noimage.svg"}
+                  src={getImageUrl(computer.images)}
                   alt={computer.name}
                   variant="rounded"
                   sx={{ width: 48, height: 48 }}
-                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                    (e.target as HTMLImageElement).src = "/images/noimage.svg";
-                  }}
+                  onError={handleImageError}
                 />
               </TableCell>
               <TableCell>
@@ -142,47 +149,23 @@ export function ComputerTable({ data }: ComputerTableProps) {
                 </Typography>
               </TableCell>
               <TableCell>
-                <Chip
-                  label={
-                    conditionLabels[
-                      computer.condition as keyof typeof conditionLabels
-                    ] || computer.condition
-                  }
-                  color={
-                    (conditionColors[
-                      computer.condition as keyof typeof conditionColors
-                    ] as
-                      | "default"
-                      | "primary"
-                      | "secondary"
-                      | "error"
-                      | "info"
-                      | "success"
-                      | "warning") || "default"
-                  }
-                  size="small"
+                <ComputerConditionChip
+                  condition={computer.condition || "unknown"}
                 />
               </TableCell>
               <TableCell>
                 <Typography variant="body2" color="text.secondary">
-                  {new Date(computer.updatedAt).toLocaleDateString("th-TH")}
+                  {formatDate(computer.updatedAt)}
                 </Typography>
               </TableCell>
               <TableCell>
-                <Box sx={{ display: "flex", gap: 0.5 }}>
-                  <IconButton size="small" color="primary">
-                    <Visibility fontSize="small" />
-                  </IconButton>
-                  <IconButton size="small" color="default">
-                    <Edit fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => handleMenuOpen(e, computer.id)}
-                  >
-                    <MoreVert fontSize="small" />
-                  </IconButton>
-                </Box>
+                <ComputerActions
+                  computerId={computer.id}
+                  onView={onView}
+                  onEdit={onEdit}
+                  onMenuOpen={handleMenuOpen}
+                  variant="table"
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -190,15 +173,14 @@ export function ComputerTable({ data }: ComputerTableProps) {
       </Table>
 
       {/* Menu สำหรับตัวเลือกเพิ่มเติม */}
-      <Menu
+      <ComputerMenu
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
+        isOpen={isOpen}
         onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>ลบ</MenuItem>
-        <MenuItem onClick={handleMenuClose}>ทำซ้ำ</MenuItem>
-        <MenuItem onClick={handleMenuClose}>ส่งออก</MenuItem>
-      </Menu>
+        onDelete={handleDelete}
+        onDuplicate={handleDuplicate}
+        onExport={handleExport}
+      />
     </TableContainer>
   );
 }
