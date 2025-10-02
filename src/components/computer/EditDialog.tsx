@@ -48,6 +48,7 @@ export default function ComputerEditDialog({
     setPrimary,
     removeImage,
     addImageByUrl,
+    addImageByFile,
     setActiveIndex,
   } = useComputerEditDialog({ initial, onSubmit });
 
@@ -75,12 +76,13 @@ export default function ComputerEditDialog({
               onSetPrimary={setPrimary}
               onRemoveImage={removeImage}
               onAddImageByUrl={addImageByUrl}
+              onAddImageByFile={addImageByFile}
             />
           </Box>
 
           {/* RIGHT: Form fields */}
           <Box sx={{ width: { xs: "100%", md: "60%" } }}>
-            <FormFields register={register} errors={errors} />
+            <FormFields register={register} control={control} errors={errors} />
             <TagsField control={control} tagOptions={tagOptions} />
           </Box>
         </Stack>

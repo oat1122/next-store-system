@@ -1,6 +1,11 @@
 import React from "react";
 import { Box, Stack, TextField, MenuItem } from "@mui/material";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import {
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  Controller,
+} from "react-hook-form";
 import {
   ComputerFormValues,
   CONDITION_OPTIONS,
@@ -10,10 +15,11 @@ import { FormSection } from "./FormSection";
 
 interface FormFieldsProps {
   register: UseFormRegister<ComputerFormValues>;
+  control: Control<ComputerFormValues>;
   errors: FieldErrors<ComputerFormValues>;
 }
 
-export function FormFields({ register, errors }: FormFieldsProps) {
+export function FormFields({ register, control, errors }: FormFieldsProps) {
   return (
     <>
       {/* Basic Information */}
@@ -84,20 +90,25 @@ export function FormFields({ register, errors }: FormFieldsProps) {
               error={!!errors.storageGb}
               helperText={errors.storageGb?.message}
             />
-            <TextField
-              select
-              label="ชนิด Storage"
-              fullWidth
-              defaultValue=""
-              {...register("storageType")}
-            >
-              <MenuItem value="">—</MenuItem>
-              {STORAGE_TYPE_OPTIONS.map((opt) => (
-                <MenuItem key={opt} value={opt}>
-                  {opt}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Controller
+              name="storageType"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  label="ชนิด Storage"
+                  fullWidth
+                  {...field}
+                  value={field.value || ""}
+                >
+                  {STORAGE_TYPE_OPTIONS.map((opt) => (
+                    <MenuItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
           </Stack>
         </Stack>
       </FormSection>
@@ -106,20 +117,25 @@ export function FormFields({ register, errors }: FormFieldsProps) {
       <FormSection title="สถานะ & ผู้ครอบครอง">
         <Stack spacing={2}>
           <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-            <TextField
-              select
-              label="สภาพ (condition)"
-              fullWidth
-              defaultValue=""
-              {...register("condition")}
-            >
-              <MenuItem value="">—</MenuItem>
-              {CONDITION_OPTIONS.map((c) => (
-                <MenuItem key={c} value={c}>
-                  {c}
-                </MenuItem>
-              ))}
-            </TextField>
+            <Controller
+              name="condition"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  select
+                  label="สภาพ (condition)"
+                  fullWidth
+                  {...field}
+                  value={field.value || ""}
+                >
+                  {CONDITION_OPTIONS.map((c) => (
+                    <MenuItem key={c.value} value={c.value}>
+                      {c.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              )}
+            />
             <TextField
               label="ผู้ถือครอง (owner)"
               fullWidth

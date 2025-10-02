@@ -45,3 +45,7 @@ next-env.d.ts
 .eslintcache
 
 /Doc
+
+# uploads (keep structure but not uploaded files)
+/uploads/*
+/uploads/.gitkeep

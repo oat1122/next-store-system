@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 export type ImageItem = {
@@ -30,9 +30,20 @@ export interface UseComputerEditDialogProps {
   onSubmit: (payload: ComputerFormValues) => Promise<void> | void;
 }
 
-export const CONDITION_OPTIONS = ["New", "Like New", "Good", "Fair", "Poor"];
+export const CONDITION_OPTIONS = [
+  { value: "", label: "—" },
+  { value: "in_use", label: "ใช้งาน" },
+  { value: "repair", label: "ซ่อม" },
+  { value: "retired", label: "เลิกใช้" },
+];
 
-export const STORAGE_TYPE_OPTIONS = ["SSD", "HDD", "NVMe", "Hybrid"];
+export const STORAGE_TYPE_OPTIONS = [
+  { value: "", label: "—" },
+  { value: "SSD", label: "SSD" },
+  { value: "HDD", label: "HDD" },
+  { value: "NVMe", label: "NVMe" },
+  { value: "Hybrid", label: "Hybrid" },
+];
 
 export function useComputerEditDialog({
   initial,
@@ -73,7 +84,56 @@ export function useComputerEditDialog({
     formState: { errors, isSubmitting, isDirty },
     watch,
     setValue,
+    reset,
   } = form;
+
+  // Reset form when initial data changes
+  useEffect(() => {
+    if (initial) {
+      const newValues: ComputerFormValues = {
+        id: initial.id,
+        code: initial.code ?? "",
+        name: initial.name ?? "",
+        brand: initial.brand ?? "",
+        model: initial.model ?? "",
+        cpu: initial.cpu ?? "",
+        gpu: initial.gpu ?? "",
+        ramGb: (initial.ramGb as number | undefined) ?? undefined,
+        storageGb: (initial.storageGb as number | undefined) ?? undefined,
+        storageType: initial.storageType ?? "",
+        condition: initial.condition ?? "",
+        owner: initial.owner ?? "",
+        location: initial.location ?? "",
+        tags: (initial.tags as string[] | undefined) ?? [],
+        images: (initial.images as ImageItem[] | undefined) ?? [],
+      };
+      reset(newValues);
+
+      // Set active image index to primary image or first image
+      const primaryIndex =
+        newValues.images?.findIndex((img) => img.isPrimary) ?? 0;
+      setActiveIndex(Math.max(0, primaryIndex));
+    } else {
+      // Reset to empty form for new computer
+      reset({
+        code: "",
+        name: "",
+        brand: "",
+        model: "",
+        cpu: "",
+        gpu: "",
+        ramGb: undefined,
+        storageGb: undefined,
+        storageType: "",
+        condition: "",
+        owner: "",
+        location: "",
+        tags: [],
+        images: [],
+      });
+      setActiveIndex(0);
+    }
+  }, [initial, reset]);
 
   const images = watch("images");
   const watchedValues = {
@@ -108,6 +168,35 @@ export function useComputerEditDialog({
     ];
     setValue("images", next, { shouldDirty: true });
     setActiveIndex(next.findIndex((i) => i.isPrimary) ?? 0);
+  };
+
+  const addImageByFile = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to upload image");
+      }
+
+      const result = await response.json();
+
+      const next = [
+        ...(images ?? []),
+        { url: result.url, isPrimary: (images?.length ?? 0) === 0 },
+      ];
+      setValue("images", next, { shouldDirty: true });
+      setActiveIndex(next.findIndex((i) => i.isPrimary) ?? 0);
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+      alert("ไม่สามารถอัปโหลดรูปภาพได้: " + (error as Error).message);
+    }
   };
 
   // Form submission
@@ -169,6 +258,7 @@ export function useComputerEditDialog({
     setPrimary,
     removeImage,
     addImageByUrl,
+    addImageByFile,
     setActiveIndex,
   };
 }
