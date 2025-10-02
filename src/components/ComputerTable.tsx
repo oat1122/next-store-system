@@ -151,7 +151,14 @@ export function ComputerTable({ data }: ComputerTableProps) {
                   color={
                     (conditionColors[
                       computer.condition as keyof typeof conditionColors
-                    ] as 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning') || 'default'
+                    ] as
+                      | "default"
+                      | "primary"
+                      | "secondary"
+                      | "error"
+                      | "info"
+                      | "success"
+                      | "warning") || "default"
                   }
                   size="small"
                 />
