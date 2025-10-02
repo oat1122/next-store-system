@@ -9,6 +9,7 @@ import {
   MenuItem,
   Paper,
   Stack,
+  SelectChangeEvent,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { ViewMode } from "@/types/computer";
@@ -20,7 +21,7 @@ interface ComputerFiltersProps {
   conditionFilter: string;
   viewMode: ViewMode;
   onSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onConditionChange: (event: any) => void;
+  onConditionChange: (event: SelectChangeEvent<string>) => void;
   onViewModeChange: (mode: ViewMode) => void;
 }
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Computer } from "@/types/computer";
+import { SelectChangeEvent } from "@mui/material";
 
 interface ComputerResponse {
   data: Computer[];
@@ -30,7 +31,7 @@ interface UseComputersReturn {
   conditionFilter: string;
   setConditionFilter: (condition: string) => void;
   handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleConditionChange: (event: any) => void;
+  handleConditionChange: (event: SelectChangeEvent<string>) => void;
   handlePageChange: (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -83,7 +84,7 @@ export function useComputers(): UseComputersReturn {
     setPage(1); // Reset to first page when searching
   };
 
-  const handleConditionChange = (event: any) => {
+  const handleConditionChange = (event: SelectChangeEvent<string>) => {
     setConditionFilter(event.target.value as string);
     setPage(1); // Reset to first page when filtering
   };
