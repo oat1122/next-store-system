@@ -185,14 +185,27 @@ export function ImageEditor({
               style={{ display: "none" }}
             />
           </div>
-        </Stack>{" "}
+        </Stack>
         {hasImages ? (
-          <ImageList cols={3} gap={12} rowHeight={96}>
-            {" "}
-            {/* เปลี่ยนจาก 5 cols เป็น 3 cols และขนาด 96px */}
+          <ImageList
+            cols={5}
+            gap={8}
+            sx={{
+              width: "100%",
+              height: "auto",
+              overflow: "visible",
+            }}
+          >
             {images!.map((img, idx) => (
-              <ImageListItem key={`${img.url}-${idx}`}>
-                <Box sx={{ position: "relative" }}>
+              <ImageListItem
+                key={`${img.url}-${idx}`}
+                sx={{
+                  height: "auto !important",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Box sx={{ position: "relative", mb: 1 }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={img.url}
@@ -201,14 +214,14 @@ export function ImageEditor({
                     onClick={() => onSetActiveIndex(idx)}
                     style={{
                       width: "100%",
-                      height: 96, // เพิ่มจาก 64px เป็น 96px
+                      height: 64,
                       objectFit: "cover",
                       cursor: "pointer",
-                      borderRadius: 8, // เพิ่ม border radius
-                      outline:
+                      borderRadius: 6,
+                      border:
                         idx === activeIndex
-                          ? "3px solid #1976d2"
-                          : "1px solid #e0e0e0",
+                          ? "2px solid #1976d2"
+                          : "2px solid transparent",
                       transition: "all 0.2s ease",
                     }}
                   />
@@ -238,7 +251,7 @@ export function ImageEditor({
                 <Stack
                   direction="row"
                   spacing={0.5}
-                  sx={{ mt: 1, justifyContent: "center" }}
+                  sx={{ justifyContent: "center" }}
                 >
                   <Tooltip
                     title={img.isPrimary ? "รูปหลัก" : "ตั้งเป็นรูปหลัก"}
