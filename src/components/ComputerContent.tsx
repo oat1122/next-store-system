@@ -11,6 +11,8 @@ interface ComputerContentProps {
   error: string;
   computers: Computer[];
   viewMode: ViewMode;
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
 }
 
 export function ComputerContent({
@@ -18,6 +20,8 @@ export function ComputerContent({
   error,
   computers,
   viewMode,
+  onView,
+  onEdit,
 }: ComputerContentProps) {
   if (loading) {
     return (
@@ -46,8 +50,8 @@ export function ComputerContent({
   }
 
   return viewMode === "card" ? (
-    <ComputerCards data={computers} />
+    <ComputerCards data={computers} onView={onView} onEdit={onEdit} />
   ) : (
-    <ComputerTable data={computers} />
+    <ComputerTable data={computers} onView={onView} onEdit={onEdit} />
   );
 }

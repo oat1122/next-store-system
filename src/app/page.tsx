@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Container } from "@mui/material";
 import { useComputers } from "@/hooks/useComputers";
 import { useViewMode } from "@/hooks/useViewMode";
@@ -7,6 +8,8 @@ import { PageHeader, LoadingState } from "@/components/PageComponents";
 import { ComputerFilters } from "@/components/ComputerFilters";
 import { ComputerContent } from "@/components/ComputerContent";
 import { ComputerPagination } from "@/components/ComputerPagination";
+import { ComputerViewDialog } from "@/components";
+import { Computer } from "@/types/computer";
 
 export default function Home() {
   const { mounted, viewMode, setViewMode } = useViewMode();
@@ -22,6 +25,40 @@ export default function Home() {
     handleConditionChange,
     handlePageChange,
   } = useComputers();
+
+  // Dialog state
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [selectedComputer, setSelectedComputer] = useState<Computer | null>(
+    null
+  );
+
+  // Handle view dialog
+  const handleView = (id: string) => {
+    const found = computers.find((c) => c.id === id) || null;
+    setSelectedComputer(found);
+    setViewDialogOpen(true);
+  };
+
+  const handleCloseViewDialog = () => {
+    setViewDialogOpen(false);
+    setSelectedComputer(null);
+  };
+
+  // Handle actions from dialog
+  const handleEdit = (id: string) => {
+    console.log("Edit computer:", id);
+    // TODO: นำทางไปหน้าแก้ไข
+  };
+
+  const handleDuplicate = (id: string) => {
+    console.log("Duplicate computer:", id);
+    // TODO: ทำซ้ำข้อมูล
+  };
+
+  const handleExport = (id: string) => {
+    console.log("Export computer:", id);
+    // TODO: ส่งออกข้อมูล
+  };
 
   // Prevent hydration mismatch by only rendering after mount
   if (!mounted) {
@@ -50,6 +87,7 @@ export default function Home() {
         error={error}
         computers={computers}
         viewMode={viewMode}
+        onView={handleView}
       />
 
       {!loading && !error && computers.length > 0 && (
@@ -60,6 +98,16 @@ export default function Home() {
           onPageChange={handlePageChange}
         />
       )}
+
+      {/* View Dialog */}
+      <ComputerViewDialog
+        open={viewDialogOpen}
+        onClose={handleCloseViewDialog}
+        computer={selectedComputer}
+        onEdit={handleEdit}
+        onDuplicate={handleDuplicate}
+        onExport={handleExport}
+      />
     </Container>
   );
 }
