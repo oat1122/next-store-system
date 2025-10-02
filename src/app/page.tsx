@@ -12,7 +12,9 @@ import {
   ComputerPagination,
 } from "@/components";
 import { ComputerViewDialog } from "@/components";
+import { ComputerEditDialog } from "@/components/computer";
 import { Computer } from "@/types/computer";
+import { ComputerFormValues } from "@/hooks/useComputerEditDialog";
 
 export default function Home() {
   const { mounted, viewMode, setViewMode } = useViewMode();
@@ -35,6 +37,20 @@ export default function Home() {
     null
   );
 
+  // Edit dialog state
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingComputer, setEditingComputer] = useState<Computer | null>(null);
+
+  // Mock tag options - ในความเป็นจริงอาจมาจาก API
+  const tagOptions = [
+    "Gaming",
+    "Office",
+    "Development",
+    "Testing",
+    "Server",
+    "Laptop",
+  ];
+
   // Handle view dialog
   const handleView = (id: string) => {
     const found = computers.find((c) => c.id === id) || null;
@@ -49,8 +65,75 @@ export default function Home() {
 
   // Handle actions from dialog
   const handleEdit = (id: string) => {
-    console.log("Edit computer:", id);
-    // TODO: นำทางไปหน้าแก้ไข
+    const found = computers.find((c) => c.id === id) || null;
+    setEditingComputer(found);
+    setEditDialogOpen(true);
+    // Close view dialog if it's open
+    setViewDialogOpen(false);
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditDialogOpen(false);
+    setEditingComputer(null);
+  };
+
+  const handleEditSubmit = async (payload: ComputerFormValues) => {
+    try {
+      console.log("Submitting computer data:", payload);
+
+      if (payload.id) {
+        // Update existing computer
+        // TODO: เรียก API สำหรับอัปเดต
+        console.log("Updating computer:", payload.id);
+      } else {
+        // Create new computer
+        // TODO: เรียก API สำหรับสร้างใหม่
+        console.log("Creating new computer");
+      }
+
+      // Close dialog
+      handleCloseEditDialog();
+
+      // TODO: Refetch data หรือ update state
+      // refetchComputers();
+    } catch (error) {
+      console.error("Failed to save computer:", error);
+      // TODO: แสดง error message
+    }
+  };
+
+  // Transform Computer to ComputerFormValues
+  const transformComputerToFormValues = (
+    computer: Computer | null
+  ): Partial<ComputerFormValues> | null => {
+    if (!computer) return null;
+
+    return {
+      id: computer.id,
+      code: computer.code,
+      name: computer.name,
+      brand: computer.brand,
+      model: computer.model,
+      cpu: computer.cpu,
+      gpu: computer.gpu,
+      ramGb: computer.ramGb,
+      storageGb: computer.storageGb,
+      storageType: computer.storageType,
+      condition: computer.condition,
+      owner: computer.owner,
+      location: computer.location,
+      tags: computer.tags.map((tag) => tag.tag.name), // แปลง ComputerTag[] เป็น string[]
+      images: computer.images.map((img) => ({
+        id: img.id,
+        url: img.url,
+        isPrimary: img.isPrimary,
+      })),
+    };
+  };
+
+  const handleCreateNew = () => {
+    setEditingComputer(null); // ไม่มี initial data
+    setEditDialogOpen(true);
   };
 
   const handleDuplicate = (id: string) => {
@@ -73,6 +156,8 @@ export default function Home() {
       <PageHeader
         title="ระบบจัดการคอมพิวเตอร์"
         subtitle="จัดการและติดตามข้อมูลคอมพิวเตอร์ในองค์กร"
+        onAddNew={handleCreateNew}
+        addButtonText="เพิ่มคอมพิวเตอร์"
       />
 
       <ComputerFilters
@@ -91,6 +176,7 @@ export default function Home() {
         computers={computers}
         viewMode={viewMode}
         onView={handleView}
+        onEdit={handleEdit}
       />
 
       {!loading && !error && computers.length > 0 && (
@@ -110,6 +196,15 @@ export default function Home() {
         onEdit={handleEdit}
         onDuplicate={handleDuplicate}
         onExport={handleExport}
+      />
+
+      {/* Edit Dialog */}
+      <ComputerEditDialog
+        open={editDialogOpen}
+        onClose={handleCloseEditDialog}
+        initial={transformComputerToFormValues(editingComputer)}
+        tagOptions={tagOptions}
+        onSubmit={handleEditSubmit}
       />
     </Container>
   );
