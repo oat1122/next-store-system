@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Computer {
+  id           String   @id @default(cuid())
+  code         String   @unique
+  name         String
+  brand        String?
+  model        String?
+  cpu          String?
+  gpu          String?
+  ramGb        Int?
+  storageGb    Int?
+  storageType  String?
+  condition    String?     // in_use, repair, retired (ถ้าจะจริงจัง ค่อยเปลี่ยนเป็น enum)
+  owner        String?
+  location     String?
+  images       ComputerImage[]
+  tags         ComputerTag[]   // ← เพิ่มช่องทางสัมพันธ์กับ Tag
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([name], map: "idx_computer_name")
+  @@index([code], map: "idx_computer_code")
+  @@index([owner, location], map: "idx_owner_location")
+}
+
+model Tag {
+  id        String        @id @default(cuid())
+  name      String        @unique
+  computers ComputerTag[]
+
+  @@index([name], map: "idx_tag_name")
+}
+
+model ComputerTag {
+  computerId String
+  tagId      String
+  computer   Computer @relation(fields: [computerId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([computerId, tagId])
+  @@index([computerId], map: "idx_ct_computer")
+  @@index([tagId], map: "idx_ct_tag")
+}
+
+model ComputerImage {
+  id          String   @id @default(cuid())
+  computerId  String
+  computer    Computer @relation(fields: [computerId], references: [id], onDelete: Cascade)
+  url         String
+  isPrimary   Boolean  @default(false)
+
+  @@index([computerId], map: "idx_image_computer")
+}
