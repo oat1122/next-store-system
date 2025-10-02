@@ -62,7 +62,7 @@ export function ComputerTable({
     if (selectedId) onExport?.(selectedId);
   };
 
-  const getColumnByKey = (key: string) => {
+  const _getColumnByKey = (key: string) => {
     return columns.find((col) => col.key === key);
   };
 
