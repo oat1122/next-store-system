@@ -1,49 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import {
+  ImageItem,
+  ComputerFormValues,
+  UseComputerEditDialogProps,
+} from "@/types/computer";
 
-export type ImageItem = {
-  id?: string;
-  url: string;
-  isPrimary?: boolean;
-};
-
-export type ComputerFormValues = {
-  id?: string;
-  code: string;
-  name: string;
-  brand?: string | null;
-  model?: string | null;
-  cpu?: string | null;
-  gpu?: string | null;
-  ramGb?: number | null;
-  storageGb?: number | null;
-  storageType?: string | null;
-  condition?: string | null;
-  owner?: string | null;
-  location?: string | null;
-  tags?: string[];
-  images?: ImageItem[];
-};
-
-export interface UseComputerEditDialogProps {
-  initial?: Partial<ComputerFormValues> | null;
-  onSubmit: (payload: ComputerFormValues) => Promise<void> | void;
-}
-
-export const CONDITION_OPTIONS = [
-  { value: "", label: "—" },
-  { value: "in_use", label: "ใช้งาน" },
-  { value: "repair", label: "ซ่อม" },
-  { value: "retired", label: "เลิกใช้" },
-];
-
-export const STORAGE_TYPE_OPTIONS = [
-  { value: "", label: "—" },
-  { value: "SSD", label: "SSD" },
-  { value: "HDD", label: "HDD" },
-  { value: "NVMe", label: "NVMe" },
-  { value: "Hybrid", label: "Hybrid" },
-];
+export type { UseComputerEditDialogProps };
 
 export function useComputerEditDialog({
   initial,

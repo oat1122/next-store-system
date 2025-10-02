@@ -1,7 +1,7 @@
 import React from "react";
 import { Autocomplete, TextField, Chip } from "@mui/material";
 import { Controller, Control } from "react-hook-form";
-import { ComputerFormValues } from "@/hooks/useComputerEditDialog";
+import { ComputerFormValues } from "@/types/computer";
 import { FormSection } from "./FormSection";
 
 interface TagsFieldProps {

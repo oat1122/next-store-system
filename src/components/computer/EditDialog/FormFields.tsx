@@ -10,7 +10,7 @@ import {
   ComputerFormValues,
   CONDITION_OPTIONS,
   STORAGE_TYPE_OPTIONS,
-} from "@/hooks/useComputerEditDialog";
+} from "@/types/computer";
 import { FormSection } from "./FormSection";
 
 interface FormFieldsProps {

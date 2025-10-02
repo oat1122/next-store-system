@@ -8,8 +8,8 @@ export { useComputerViewDialog } from "./useComputerViewDialog";
 export { useComputerEditDialog } from "./useComputerEditDialog";
 export type { ColumnConfig } from "./useTableColumns";
 export type { UseComputerViewDialogProps } from "./useComputerViewDialog";
-export type {
-  UseComputerEditDialogProps,
-  ComputerFormValues,
-  ImageItem,
-} from "./useComputerEditDialog";
+export type { UseComputerEditDialogProps } from "./useComputerEditDialog";
+
+// Re-export types and constants from computer.ts for convenience
+export type { ComputerFormValues, ImageItem } from "../types/computer";
+export { CONDITION_OPTIONS, STORAGE_TYPE_OPTIONS } from "../types/computer";

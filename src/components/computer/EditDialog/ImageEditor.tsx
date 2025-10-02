@@ -21,7 +21,7 @@ import {
   Link as LinkIcon,
   MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
-import { ImageItem } from "@/hooks/useComputerEditDialog";
+import { ImageItem } from "@/types/computer";
 
 interface ImageEditorProps {
   images?: ImageItem[];
@@ -280,7 +280,7 @@ export function ImageEditor({
               ยังไม่มีรูปภาพ
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              คลิก "เพิ่มรูป" เพื่ออัปโหลดรูปภาพ
+              คลิก &quot;เพิ่มรูป&quot; เพื่ออัปโหลดรูปภาพ
             </Typography>
           </Box>
         )}

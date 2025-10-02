@@ -2,11 +2,8 @@
 
 import React from "react";
 import { Dialog, DialogContent, Box, Stack } from "@mui/material";
-import {
-  useComputerEditDialog,
-  ComputerFormValues,
-  type UseComputerEditDialogProps,
-} from "@/hooks/useComputerEditDialog";
+import { useComputerEditDialog } from "@/hooks/useComputerEditDialog";
+import { type UseComputerEditDialogProps } from "@/types/computer";
 import {
   DialogHeader,
   DialogFooter,
