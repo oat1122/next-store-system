@@ -74,7 +74,7 @@ export function ComputerCards({ data }: ComputerCardsProps) {
         <Box key={computer.id}>
           <Card
             sx={{
-              height: "100%",
+              height: "100%", // กำหนดความสูงคงที่
               display: "flex",
               flexDirection: "column",
               transition: "all 0.3s ease",
@@ -121,48 +121,98 @@ export function ComputerCards({ data }: ComputerCardsProps) {
               </Box>
             </Box>
 
-            <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+            <CardContent
+              sx={{
+                flexGrow: 1,
+                pb: 1,
+                minHeight: "200px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               {/* ชื่อและรหัส */}
-              <Typography variant="h6" component="h3" gutterBottom noWrap>
+              <Typography
+                variant="h6"
+                component="h3"
+                gutterBottom
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  minHeight: "48px",
+                  lineHeight: 1.2,
+                }}
+              >
                 {computer.code} - {computer.name}
               </Typography>
 
               {/* ยี่ห้อและรุ่น */}
-              <Typography variant="body2" color="text.secondary" gutterBottom>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                gutterBottom
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: "vertical",
+                  minHeight: "20px",
+                }}
+              >
                 {computer.brand} {computer.model}
               </Typography>
 
               {/* Tags */}
-              <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
-                <Chip label={computer.owner} variant="outlined" size="small" />
-                <Chip
-                  label={computer.location}
-                  variant="outlined"
-                  size="small"
-                />
-              </Stack>
+              <Box sx={{ mb: 2, minHeight: "32px" }}>
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                  <Chip
+                    label={computer.owner}
+                    variant="outlined"
+                    size="small"
+                  />
+                  <Chip
+                    label={computer.location}
+                    variant="outlined"
+                    size="small"
+                  />
+                </Stack>
+              </Box>
 
               {/* ข้อมูลฮาร์ดแวร์ */}
-              <Stack spacing={1}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Computer color="action" sx={{ fontSize: 16 }} />
-                  <Typography variant="body2" color="text.secondary" noWrap>
-                    {computer.cpu || "—"}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Memory color="action" sx={{ fontSize: 16 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {formatRam(computer.ramGb)}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Storage color="action" sx={{ fontSize: 16 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {formatStorage(computer.storageGb, computer.storageType)}
-                  </Typography>
-                </Box>
-              </Stack>
+              <Box sx={{ mt: "auto" }}>
+                <Stack spacing={1}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Computer color="action" sx={{ fontSize: 16 }} />
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        flex: 1,
+                      }}
+                    >
+                      {computer.cpu || "—"}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Memory color="action" sx={{ fontSize: 16 }} />
+                    <Typography variant="body2" color="text.secondary">
+                      {formatRam(computer.ramGb)}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Storage color="action" sx={{ fontSize: 16 }} />
+                    <Typography variant="body2" color="text.secondary">
+                      {formatStorage(computer.storageGb, computer.storageType)}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Box>
             </CardContent>
 
             {/* ปุ่มจัดการ */}
