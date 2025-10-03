@@ -21,19 +21,7 @@ import {
   Link as LinkIcon,
   MoreVert as MoreVertIcon,
 } from "@mui/icons-material";
-import { ImageItem } from "@/types/computer";
-
-interface ImageEditorProps {
-  images?: ImageItem[];
-  activeIndex: number;
-  hasImages: boolean;
-  activeImageUrl: string;
-  onSetActiveIndex: (index: number) => void;
-  onSetPrimary: (index: number) => void;
-  onRemoveImage: (index: number) => void;
-  onAddImageByUrl: () => void;
-  onAddImageByFile: (file: File) => Promise<void>;
-}
+import { ImageEditorProps } from "@/types/computer";
 
 export function ImageEditor({
   images,

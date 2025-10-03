@@ -1,10 +1,6 @@
 import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
-
-interface FormSectionProps {
-  title: string;
-  children: React.ReactNode;
-}
+import { FormSectionProps } from "@/types/computer";
 
 export function FormSection({ title, children }: FormSectionProps) {
   return (

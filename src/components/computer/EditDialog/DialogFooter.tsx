@@ -1,20 +1,14 @@
 import React from "react";
 import { DialogActions, Button, Chip, Box } from "@mui/material";
 import { Save } from "@mui/icons-material";
-
-interface DialogFooterProps {
-  isDirty: boolean;
-  isSubmitting: boolean;
-  onCancel: () => void;
-  onSubmit: () => void;
-}
+import { EditDialogFooterProps } from "@/types/computer";
 
 export function DialogFooter({
   isDirty,
   isSubmitting,
   onCancel,
   onSubmit,
-}: DialogFooterProps) {
+}: EditDialogFooterProps) {
   return (
     <DialogActions sx={{ p: 2 }}>
       <Box sx={{ flex: 1 }} />

@@ -60,13 +60,16 @@ export function ComputerSpecs({ computer }: ComputerSpecsProps) {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Memory color="action" sx={{ fontSize: 16 }} />
             <Typography variant="body2" color="text.secondary">
-              {formatRam(computer.ramGb)}
+              {formatRam(computer.ramGb ?? undefined)}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Storage color="action" sx={{ fontSize: 16 }} />
             <Typography variant="body2" color="text.secondary">
-              {formatStorage(computer.storageGb, computer.storageType)}
+              {formatStorage(
+                computer.storageGb ?? undefined,
+                computer.storageType ?? undefined
+              )}
             </Typography>
           </Box>
         </Stack>
@@ -78,6 +81,11 @@ export function ComputerSpecs({ computer }: ComputerSpecsProps) {
 export function ComputerConditionChip({
   condition,
 }: ComputerConditionChipProps) {
+  // Handle undefined/null condition
+  if (!condition) {
+    return <Chip label="ไม่ระบุ" color="default" size="small" />;
+  }
+
   return (
     <Chip
       label={

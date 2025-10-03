@@ -29,7 +29,8 @@ export function useComputerEditDialog({
       condition: initial?.condition ?? "",
       owner: initial?.owner ?? "",
       location: initial?.location ?? "",
-      tags: (initial?.tags as string[] | undefined) ?? [],
+      tags:
+        (initial?.tags?.map((tag) => tag.name) as string[] | undefined) ?? [],
       images: (initial?.images as ImageItem[] | undefined) ?? [],
     }),
     [initial]
@@ -67,7 +68,8 @@ export function useComputerEditDialog({
         condition: initial.condition ?? "",
         owner: initial.owner ?? "",
         location: initial.location ?? "",
-        tags: (initial.tags as string[] | undefined) ?? [],
+        tags:
+          (initial.tags?.map((tag) => tag.name) as string[] | undefined) ?? [],
         images: (initial.images as ImageItem[] | undefined) ?? [],
       };
       reset(newValues);
@@ -186,12 +188,13 @@ export function useComputerEditDialog({
           : Number(values.storageGb),
       tags: values.tags ?? [],
       images: (values.images ?? []).map((i) => ({
-        id: i.id,
         url: i.url,
         isPrimary: !!i.isPrimary,
       })),
     };
-    await onSubmit(clean);
+    if (onSubmit) {
+      await onSubmit(clean);
+    }
   });
 
   // Computed values

@@ -1,23 +1,13 @@
 import React from "react";
 import { Box, Stack, TextField, MenuItem } from "@mui/material";
-import {
-  UseFormRegister,
-  FieldErrors,
-  Control,
-  Controller,
-} from "react-hook-form";
+import { Controller } from "react-hook-form";
 import {
   ComputerFormValues,
   CONDITION_OPTIONS,
   STORAGE_TYPE_OPTIONS,
+  FormFieldsProps,
 } from "@/types/computer";
 import { FormSection } from "./FormSection";
-
-interface FormFieldsProps {
-  register: UseFormRegister<ComputerFormValues>;
-  control: Control<ComputerFormValues>;
-  errors: FieldErrors<ComputerFormValues>;
-}
 
 export function FormFields({ register, control, errors }: FormFieldsProps) {
   return (

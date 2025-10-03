@@ -1,13 +1,8 @@
 import React from "react";
 import { Autocomplete, TextField, Chip } from "@mui/material";
-import { Controller, Control } from "react-hook-form";
-import { ComputerFormValues } from "@/types/computer";
+import { Controller } from "react-hook-form";
+import { TagsFieldProps } from "@/types/computer";
 import { FormSection } from "./FormSection";
-
-interface TagsFieldProps {
-  control: Control<ComputerFormValues>;
-  tagOptions?: string[];
-}
 
 export function TagsField({ control, tagOptions = [] }: TagsFieldProps) {
   return (

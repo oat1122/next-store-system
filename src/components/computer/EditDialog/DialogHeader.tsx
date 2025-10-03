@@ -8,15 +8,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { Close, Computer as ComputerIcon } from "@mui/icons-material";
-
-interface DialogHeaderProps {
-  code: string;
-  name: string;
-  brand?: string;
-  model?: string;
-  activeImageUrl: string;
-  onClose: () => void;
-}
+import { EditDialogHeaderProps } from "@/types/computer";
 
 export function DialogHeader({
   code,
@@ -25,7 +17,7 @@ export function DialogHeader({
   model,
   activeImageUrl,
   onClose,
-}: DialogHeaderProps) {
+}: EditDialogHeaderProps) {
   return (
     <DialogTitle sx={{ pr: 6 }}>
       <Stack direction="row" alignItems="center" spacing={1.5}>
