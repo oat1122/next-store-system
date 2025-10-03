@@ -64,7 +64,13 @@ export function useComputerEditDialog({
 
   // Reset form when initial data changes
   useEffect(() => {
+    console.log("useEffect triggered - initial:", initial);
+
     if (initial) {
+      // Get current form values to preserve user changes
+      const currentValues = form.getValues();
+      console.log("Current form values:", currentValues);
+
       const newValues: ComputerFormValues = {
         id: initial.id,
         code: initial.code ?? "",
@@ -83,9 +89,14 @@ export function useComputerEditDialog({
           initial.tags
             ?.map((tag) => (typeof tag === "string" ? tag : tag.name))
             .filter(Boolean) ?? [],
-        images: (initial.images as ImageItem[] | undefined) ?? [],
+        // Preserve current images if form is dirty, otherwise use initial images
+        images:
+          form.formState.isDirty && (currentValues.images?.length ?? 0) > 0
+            ? currentValues.images
+            : (initial.images as ImageItem[] | undefined) ?? [],
       };
 
+      console.log("New form values:", newValues);
       reset(newValues);
 
       // Set active image index to primary image or first image
@@ -112,7 +123,7 @@ export function useComputerEditDialog({
       });
       setActiveIndex(0);
     }
-  }, [initial, reset]);
+  }, [initial?.id, reset]); // Only depend on initial.id to avoid unnecessary resets
 
   const images = watch("images");
   const watchedValues = {
@@ -151,6 +162,8 @@ export function useComputerEditDialog({
 
   const addImageByFile = async (file: File) => {
     try {
+      console.log("Starting image upload:", file.name);
+
       const formData = new FormData();
       formData.append("file", file);
 
@@ -165,13 +178,24 @@ export function useComputerEditDialog({
       }
 
       const result = await response.json();
+      console.log("Upload result:", result);
+
+      const currentImages = images ?? [];
+      console.log("Current images before add:", currentImages);
 
       const next = [
-        ...(images ?? []),
-        { url: result.url, isPrimary: (images?.length ?? 0) === 0 },
+        ...currentImages,
+        { url: result.url, isPrimary: currentImages.length === 0 },
       ];
+
+      console.log("New images array:", next);
+
       setValue("images", next, { shouldDirty: true });
-      setActiveIndex(next.findIndex((i) => i.isPrimary) ?? 0);
+
+      // Set active index to the newly added image
+      const newImageIndex = next.length - 1;
+      console.log("Setting active index to:", newImageIndex);
+      setActiveIndex(newImageIndex);
     } catch (error) {
       console.error("Failed to upload image:", error);
       alert("ไม่สามารถอัปโหลดรูปภาพได้: " + (error as Error).message);
@@ -180,6 +204,9 @@ export function useComputerEditDialog({
 
   // Form submission
   const submit = handleSubmit(async (values) => {
+    console.log("Form submission - raw values:", values);
+    console.log("Form submission - images count:", values.images?.length);
+
     const clean: ComputerFormValues = {
       ...values,
       code: values.code.trim(),
@@ -206,6 +233,10 @@ export function useComputerEditDialog({
         isPrimary: !!i.isPrimary,
       })),
     };
+
+    console.log("Form submission - clean data:", clean);
+    console.log("Form submission - clean images:", clean.images);
+
     if (onSubmit) {
       await onSubmit(clean);
     }

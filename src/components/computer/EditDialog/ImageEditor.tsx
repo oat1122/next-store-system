@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Typography,
@@ -20,6 +20,7 @@ import {
   Upload as UploadIcon,
   Link as LinkIcon,
   MoreVert as MoreVertIcon,
+  BrokenImage as BrokenImageIcon,
 } from "@mui/icons-material";
 import { ImageEditorProps } from "@/types/computer";
 
@@ -36,6 +37,14 @@ export function ImageEditor({
 }: ImageEditorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [menuAnchor, setMenuAnchor] = React.useState<null | HTMLElement>(null);
+  const [imageError, setImageError] = useState(false);
+
+  // Debug: Log images whenever they change
+  React.useEffect(() => {
+    console.log("ImageEditor - images changed:", images);
+    console.log("ImageEditor - hasImages:", hasImages);
+    console.log("ImageEditor - activeIndex:", activeIndex);
+  }, [images, hasImages, activeIndex]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -46,6 +55,14 @@ export function ImageEditor({
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  const handleImageLoad = () => {
+    setImageError(false);
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -87,33 +104,55 @@ export function ImageEditor({
       >
         {hasImages ? (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={activeImageUrl}
-              alt="active"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
+            {imageError ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "error.main",
+                  gap: 1,
+                }}
+              >
+                <BrokenImageIcon sx={{ fontSize: 48 }} />
+                <Typography variant="caption">
+                  ไม่สามารถโหลดรูปภาพได้
+                </Typography>
+              </Box>
+            ) : (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeImageUrl}
+                  alt="active"
+                  onError={handleImageError}
+                  onLoad={handleImageLoad}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
 
-            {/* Image counter overlay */}
-            <Box
-              sx={{
-                position: "absolute",
-                bottom: 8,
-                right: 8,
-                bgcolor: "rgba(0,0,0,0.7)",
-                color: "white",
-                px: 1.5,
-                py: 0.5,
-                borderRadius: 1,
-                fontSize: "0.75rem",
-              }}
-            >
-              {activeIndex + 1} / {images!.length}
-            </Box>
+                {/* Image counter overlay */}
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 8,
+                    right: 8,
+                    bgcolor: "rgba(0,0,0,0.7)",
+                    color: "white",
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 1,
+                    fontSize: "0.75rem",
+                  }}
+                >
+                  {activeIndex + 1} / {images!.length}
+                </Box>
+              </>
+            )}
           </>
         ) : (
           <ComputerIcon sx={{ fontSize: 48, color: "grey.400" }} />

@@ -36,6 +36,7 @@ interface UseComputersReturn {
     event: React.ChangeEvent<unknown>,
     newPage: number
   ) => void;
+  refetch: () => Promise<void>;
 }
 
 export function useComputers(): UseComputersReturn {
@@ -52,30 +53,30 @@ export function useComputers(): UseComputersReturn {
     totalPages: 0,
   });
 
+  const fetchComputers = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "12",
+        ...(searchTerm && { search: searchTerm }),
+        ...(conditionFilter && { condition: conditionFilter }),
+      });
+
+      const response = await fetch(`/api/computers?${params}`);
+      if (!response.ok) throw new Error("Failed to fetch computers");
+
+      const data: ComputerResponse = await response.json();
+      setComputers(data.data);
+      setPagination(data.pagination);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchComputers = async () => {
-      try {
-        setLoading(true);
-        const params = new URLSearchParams({
-          page: page.toString(),
-          limit: "12",
-          ...(searchTerm && { search: searchTerm }),
-          ...(conditionFilter && { condition: conditionFilter }),
-        });
-
-        const response = await fetch(`/api/computers?${params}`);
-        if (!response.ok) throw new Error("Failed to fetch computers");
-
-        const data: ComputerResponse = await response.json();
-        setComputers(data.data);
-        setPagination(data.pagination);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchComputers();
   }, [page, searchTerm, conditionFilter]);
 
@@ -110,5 +111,6 @@ export function useComputers(): UseComputersReturn {
     handleSearchChange,
     handleConditionChange,
     handlePageChange,
+    refetch: fetchComputers,
   };
 }

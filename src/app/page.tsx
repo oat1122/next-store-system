@@ -29,6 +29,7 @@ export default function Home() {
     handleSearchChange,
     handleConditionChange,
     handlePageChange,
+    refetch,
   } = useComputers();
 
   // Dialog state
@@ -83,22 +84,46 @@ export default function Home() {
 
       if (payload.id) {
         // Update existing computer
-        // TODO: เรียก API สำหรับอัปเดต
-        console.log("Updating computer:", payload.id);
+        const response = await fetch(`/api/computers/${payload.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Failed to update computer");
+        }
+
+        console.log("Computer updated successfully");
       } else {
         // Create new computer
-        // TODO: เรียก API สำหรับสร้างใหม่
-        console.log("Creating new computer");
+        const response = await fetch("/api/computers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || "Failed to create computer");
+        }
+
+        console.log("Computer created successfully");
       }
 
       // Close dialog
       handleCloseEditDialog();
 
-      // TODO: Refetch data หรือ update state
-      // refetchComputers();
+      // Refetch data to update the list
+      await refetch();
     } catch (error) {
       console.error("Failed to save computer:", error);
-      // TODO: แสดง error message
+      alert("เกิดข้อผิดพลาด: " + (error as Error).message);
     }
   };
 
