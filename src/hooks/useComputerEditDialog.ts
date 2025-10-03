@@ -14,8 +14,21 @@ export function useComputerEditDialog({
 }: UseComputerEditDialogProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const defaultValues: ComputerFormValues = useMemo(
-    () => ({
+  const defaultValues: ComputerFormValues = useMemo(() => {
+    const processedTags =
+      initial?.tags
+        ?.map((tag) => {
+          if (typeof tag === "string") {
+            return tag;
+          } else if (tag && typeof tag === "object" && "name" in tag) {
+            return tag.name;
+          } else {
+            return String(tag);
+          }
+        })
+        .filter(Boolean) ?? [];
+
+    return {
       id: initial?.id,
       code: initial?.code ?? "",
       name: initial?.name ?? "",
@@ -29,12 +42,10 @@ export function useComputerEditDialog({
       condition: initial?.condition ?? "",
       owner: initial?.owner ?? "",
       location: initial?.location ?? "",
-      tags:
-        (initial?.tags?.map((tag) => tag.name) as string[] | undefined) ?? [],
+      tags: processedTags,
       images: (initial?.images as ImageItem[] | undefined) ?? [],
-    }),
-    [initial]
-  );
+    };
+  }, [initial]);
 
   const form = useForm<ComputerFormValues>({
     defaultValues,
@@ -69,9 +80,12 @@ export function useComputerEditDialog({
         owner: initial.owner ?? "",
         location: initial.location ?? "",
         tags:
-          (initial.tags?.map((tag) => tag.name) as string[] | undefined) ?? [],
+          initial.tags
+            ?.map((tag) => (typeof tag === "string" ? tag : tag.name))
+            .filter(Boolean) ?? [],
         images: (initial.images as ImageItem[] | undefined) ?? [],
       };
+
       reset(newValues);
 
       // Set active image index to primary image or first image

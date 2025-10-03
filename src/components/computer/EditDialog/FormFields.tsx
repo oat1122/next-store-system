@@ -21,6 +21,7 @@ export function FormFields({ register, control, errors }: FormFieldsProps) {
                 label="รหัส (code)"
                 fullWidth
                 required
+                disabled
                 {...register("code", { required: "ต้องใส่รหัส" })}
                 error={!!errors.code}
                 helperText={errors.code?.message}

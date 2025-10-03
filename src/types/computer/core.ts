@@ -60,6 +60,7 @@ export interface ComputerImage {
   id: UUID;
   computerId: UUID;
   url: string;
+  isPrimary: boolean;
   alt?: string | null;
   order?: number | null;
   createdAt?: string;

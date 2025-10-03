@@ -108,6 +108,9 @@ export default function Home() {
   ): Partial<ComputerFormValues> | null => {
     if (!computer) return null;
 
+    // Debug: ดูข้อมูล computer.tags
+    console.log("Transform - computer.tags:", computer.tags);
+
     return {
       id: computer.id,
       code: computer.code,
@@ -122,7 +125,10 @@ export default function Home() {
       condition: computer.condition,
       owner: computer.owner,
       location: computer.location,
-      tags: computer.tags.map((tag) => tag.tag.name), // แปลง ComputerTag[] เป็น string[]
+      tags: computer.tags.map((tag) => {
+        console.log("Transform - tag:", tag);
+        return tag.name;
+      }), // แปลง ComputerTag[] เป็น string[]
       images: computer.images.map((img) => ({
         id: img.id,
         url: img.url,
